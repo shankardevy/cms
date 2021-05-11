@@ -1,0 +1,6 @@
+<%= live_component @socket, CmsWeb.ArticleLive.FormComponent,
+    id: @article.id || :new,
+    title: @page_title,
+    action: @live_action,
+    article: @article,
+    return_to: Routes.article_index_path(@socket, :index) %>

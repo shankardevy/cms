@@ -12,16 +12,18 @@ defmodule Cms.Content.ComponentData do
   def load(component) do
     struct = case component["type"] do
       "cta" -> Cms.Content.Components.CTA
-      "file" -> Cms.Content.Components.File
       "gallery" -> Cms.Content.Components.Gallery
-      "image" -> Cms.Content.Components.Image
       "text" -> Cms.Content.Components.Text
+      "image" -> Cms.Content.Components.Image
+      "video" -> Cms.Content.Components.Video
+      "file" -> Cms.Content.Components.File
     end
 
-    data =  component |> Map.new(fn {k, v} -> {String.to_existing_atom(k), v} end)
+    data =  component |> Map.new(fn {k, v} -> {String.to_atom(k), v} end)
 
     component = struct!(struct, data)
 
+    IO.inspect component, label: "Component"
     {:ok, component}
   end
 

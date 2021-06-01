@@ -4,7 +4,7 @@ defmodule Cms.Content.Article do
 
   schema "articles" do
     field :title, :string
-    embeds_many :components, Cms.Content.Component
+    embeds_many :components, Cms.Content.Component, on_replace: :delete
 
     timestamps()
   end
@@ -12,8 +12,9 @@ defmodule Cms.Content.Article do
   @doc false
   def changeset(article, attrs) do
     article
-    |> cast(attrs, [:title, :components])
-    |> validate_required([:title, :components])
+    |> cast(attrs, [:title])
+    |> validate_required([:title])
+    |> cast_embed(:components)
   end
 end
 

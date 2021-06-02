@@ -10,7 +10,8 @@ defmodule Cms.Content.ComponentData do
 
   # When loading data from the database
   def load(component) do
-    struct = case component["type"] do
+    type = component["type"]
+    struct = case type do
       "cta" -> Cms.Content.Components.CTA
       "gallery" -> Cms.Content.Components.Gallery
       "text" -> Cms.Content.Components.Text
@@ -19,11 +20,16 @@ defmodule Cms.Content.ComponentData do
       "file" -> Cms.Content.Components.File
     end
 
-    data =  component |> Map.new(fn {k, v} -> {String.to_atom(k), v} end)
+    data =  component |> Map.new(fn {k, v} ->
+      # k = case is_atom(k) do
+      #   true -> k
+      #   false -> String.to_atom(k)
+      # end
+      {String.to_atom(k), v}
+    end)
 
     component = struct!(struct, data)
 
-    IO.inspect component, label: "Component"
     {:ok, component}
   end
 

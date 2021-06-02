@@ -29,7 +29,6 @@
       <% end %>
 
       <%= for component_form <- inputs_for(f, :components) do %>
-        <%= #inspect Map.from_struct(component_form) %>
         <%= live_component @socket, CmsWeb.ArticleLive.InsertButtonsComponent,
           id: "component-insert-#{component_form.index}",
           persistent: false,

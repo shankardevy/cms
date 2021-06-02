@@ -3,7 +3,7 @@ defmodule Cms.Content.Component do
   import Ecto.Changeset
 
   embedded_schema do
-    field :data, Cms.Content.ComponentData
+    field :data, :map
   end
 
   def changeset(component, attrs) do

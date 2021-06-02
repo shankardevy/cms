@@ -7,6 +7,7 @@ defmodule Cms.Content do
   alias Cms.Repo
 
   alias Cms.Content.Article
+  alias Cms.Content.Component
 
   @doc """
   Returns the list of articles.
@@ -101,4 +102,9 @@ defmodule Cms.Content do
   def change_article(%Article{} = article, attrs \\ %{}) do
     Article.changeset(article, attrs)
   end
+
+  def change_component(%Component{} = component, attrs \\ %{}) do
+    Component.changeset(component, attrs)
+  end
+
 end

@@ -1,6 +1,7 @@
 defmodule Cms.Content.Components.Gallery do
   use Ecto.Schema
 
+  @derive Jason.Encoder
   embedded_schema do
     field :title, :string
     field :alt_text, :string

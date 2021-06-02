@@ -1,21 +1,21 @@
 defmodule CmsWeb.ArticleLive.SectionComponent do
   use CmsWeb, :live_component
 
+  def ensure_component(component) when is_struct(component), do: component
+  def ensure_component(map) when is_map(map) do
+    {:ok, component} = Cms.Content.ComponentData.load(map)
+    component
+  end
+
   def render(assigns) do
     ~L"""
     <div>
       <%= hidden_inputs_for(@component_form) %>
-      <%= case @component_form.data.data.type do %>
+      <% component = ensure_component(input_value(@component_form, :data)) %>
+      <%= case component.type do %>
         <% "file" -> %>
         <div class="sm:col-span-6">
-          <label for="about" class="block text-sm font-medium text-gray-700">
-            File
-          </label>
-          <div class="mt-1">
-            <input type="hidden" name="<%= @component_form.name %>[data][type]" value="file" />
-          </div>
-        </div>
-        <div class="sm:col-span-6">
+          <input type="hidden" name="<%= @component_form.name %>[data][type]" value="file" />
           <label for="cover_photo" class="block text-sm font-medium text-gray-700">
             File
           </label>
@@ -39,14 +39,7 @@ defmodule CmsWeb.ArticleLive.SectionComponent do
         </div>
         <% "image" -> %>
           <div class="sm:col-span-6">
-            <label for="about" class="block text-sm font-medium text-gray-700">
-              Image
-            </label>
-            <div class="mt-1">
-              <input type="hidden" name="<%= @component_form.name %>[data][type]" value="image" />
-            </div>
-          </div>
-          <div class="sm:col-span-6">
+            <input type="hidden" name="<%= @component_form.name %>[data][type]" value="image" />
             <label for="cover_photo" class="block text-sm font-medium text-gray-700">
               Cover photo
             </label>
@@ -75,21 +68,18 @@ defmodule CmsWeb.ArticleLive.SectionComponent do
             </label>
             <div class="mt-1">
               <input type="hidden" name="<%= @component_form.name %>[data][type]" value="text" />
-              <textarea x-data="{resize: () => { $el.style.height = '40px'; $el.style.height = ($el.scrollHeight + 40) + 'px'}}" x-init="" x-on:input="" name="<%= @component_form.name %>[data][text]" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
-              <%= @component_form.data.data.text %>
-              </textarea>
+              <textarea x-data="{resize: () => { $el.style.height = '40px'; $el.style.height = ($el.scrollHeight + 40) + 'px'}}" x-init="" x-on:input="" name="<%= @component_form.name %>[data][text]" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"><%= component.text %></textarea>
             </div>
           </div>
-          <% "video" -> %>
+
+        <% "video" -> %>
           <div class="sm:col-span-6">
             <label for="about" class="block text-sm font-medium text-gray-700">
               Embedded video
             </label>
             <div class="mt-1">
               <input type="hidden" name="<%= @component_form.name %>[data][type]" value="video" />
-              <textarea x-data="{resize: () => { $el.style.height = '40px'; $el.style.height = ($el.scrollHeight + 40) + 'px'}}" x-init="" x-on:input="" name="<%= @component_form.name %>[data][url]" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md">
-              <%= @component_form.data.data.url %>
-              </textarea>
+              <textarea x-data="{resize: () => { $el.style.height = '40px'; $el.style.height = ($el.scrollHeight + 40) + 'px'}}" x-init="" x-on:input="" name="<%= @component_form.name %>[data][url]" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"><%= component.url %></textarea>
             </div>
           </div>
       <% end %>

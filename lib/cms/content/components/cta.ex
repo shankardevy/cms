@@ -2,7 +2,6 @@ defmodule Cms.Content.Components.CTA do
   use Ecto.Schema
 
   @derive Jason.Encoder
-
   embedded_schema do
     field :line1, :string
     field :line2, :string

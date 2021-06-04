@@ -1,7 +1,5 @@
 FROM elixir:1.12-slim
 
-RUN mix local.hex --force && mix local.rebar --force
-
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update && apt-get install -yq --no-install-recommends \
@@ -44,6 +42,9 @@ RUN { echo && echo "PS1='\[\e]0;\u \w\a\]\[\033[01;32m\]\u\[\033[00m\] \[\033[01
 
 ### Gitpod user (2) ###
 USER gitpod
+
+RUN mix local.hex --force && mix local.rebar --force
+
 # use sudo so that user does not get sudo usage info on (the first) login
 RUN sudo echo "Running 'sudo' for Gitpod: success" && \
     # create .bashrc.d folder and source it in the bashrc

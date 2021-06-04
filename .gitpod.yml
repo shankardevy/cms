@@ -2,9 +2,7 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - command: pg_start
-  - command: mix setup
-  - command: iex -S mix phx.server
+  - command: pg_start && mix setup && iex -S mix phx.server
   - command: bash
 
 ports:

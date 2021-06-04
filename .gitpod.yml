@@ -1,14 +1,3 @@
 image: 
   file: .gitpod.Dockerfile
 
-tasks:
-  - command: pg_start
-  - command: mix setup
-  - command: iex -S mix phx.server
-  - command: bash
-
-ports:
-  - port: 4000
-    onOpen: open-browser
-  - port: 5432
-    onOpen: ignore

@@ -7,8 +7,7 @@
     phx_change: "validate",
     phx_submit: "save" %>
 
-  <div x-data="{display_new: false}" class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
-
+  <div class="mt-6 grid grid-cols-1 gap-y-6 gap-x-4 sm:grid-cols-6">
     <div class="sm:col-span-4">
       <%= label f, :title, class: "block text-sm font-medium text-gray-700" %>
       <div class="mt-1 flex rounded-md shadow-sm">
@@ -18,10 +17,8 @@
       <%= error_tag f, :title %>
     </div>
 
-    <div class="sm:col-span-6">
-      <div class="flex flex-col space-y-1">
-
-      <%= if Enum.empty?(f.data.components) do %>
+    <div class="sm:col-span-4">
+      <%= if Enum.empty?(input_value(f, :components)) do %>
           <%= live_component @socket, CmsWeb.ArticleLive.InsertButtonsComponent,
           id: "component-insert-new",
           persistent: true,
@@ -38,10 +35,9 @@
             component_form: component_form %>
         <%= live_component @socket, CmsWeb.ArticleLive.InsertButtonsComponent,
           id: "component-insert-#{component_form.index}:last",
-          persistent: (Enum.count(f.data.components) - 1 == component_form.index),
+          persistent: (Enum.count(input_value(f, :components)) - 1 == component_form.index),
           insert_section_index: component_form.index + 1 %>
       <% end %>
-      </div>
     </div>
 
     <div class="sm:col-span-6">

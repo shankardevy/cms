@@ -9,12 +9,12 @@ defmodule CmsWeb.ArticleLive.SectionComponent do
 
   def render(assigns) do
     ~L"""
-    <div>
+    <div class="mt-4">
       <%= hidden_inputs_for(@component_form) %>
       <% component = ensure_component(input_value(@component_form, :data)) %>
       <%= case component.type do %>
         <% "file" -> %>
-        <div class="sm:col-span-6">
+        <div class="sm:col-span-4">
           <input type="hidden" name="<%= @component_form.name %>[data][type]" value="file" />
           <label for="cover_photo" class="block text-sm font-medium text-gray-700">
             File
@@ -38,7 +38,7 @@ defmodule CmsWeb.ArticleLive.SectionComponent do
           </div>
         </div>
         <% "image" -> %>
-          <div class="sm:col-span-6">
+          <div class="sm:col-span-4">
             <input type="hidden" name="<%= @component_form.name %>[data][type]" value="image" />
             <label for="cover_photo" class="block text-sm font-medium text-gray-700">
               Cover photo
@@ -62,7 +62,7 @@ defmodule CmsWeb.ArticleLive.SectionComponent do
             </div>
           </div>
         <% "text" -> %>
-          <div class="sm:col-span-6">
+          <div class="sm:col-span-4">
             <label for="about" class="block text-sm font-medium text-gray-700">
               Text
             </label>
@@ -73,7 +73,7 @@ defmodule CmsWeb.ArticleLive.SectionComponent do
           </div>
 
         <% "video" -> %>
-          <div class="sm:col-span-6">
+          <div class="sm:col-span-4">
             <label for="about" class="block text-sm font-medium text-gray-700">
               Embedded video
             </label>

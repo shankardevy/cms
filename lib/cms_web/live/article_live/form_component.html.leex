@@ -18,14 +18,8 @@
     </div>
 
     <div class="sm:col-span-4">
-      <%= if Enum.empty?(input_value(f, :components)) do %>
-          <%= live_component @socket, CmsWeb.ArticleLive.InsertButtonsComponent,
-          id: "component-insert-new",
-          persistent: true,
-          insert_section_index: 0 %>
-      <% end %>
-
       <%= for component_form <- inputs_for(f, :components) do %>
+      <%= unless input_value(component_form, :delete) == true do %>
         <%= live_component @socket, CmsWeb.ArticleLive.InsertButtonsComponent,
           id: "component-insert-#{component_form.index}",
           persistent: false,
@@ -37,6 +31,13 @@
           id: "component-insert-#{component_form.index}:last",
           persistent: (Enum.count(input_value(f, :components)) - 1 == component_form.index),
           insert_section_index: component_form.index + 1 %>
+      <% end %>
+      <% end %>
+      <%= if empty_components?(input_value(f, :components)) do %>
+          <%= live_component @socket, CmsWeb.ArticleLive.InsertButtonsComponent,
+          id: "component-insert-new",
+          persistent: true,
+          insert_section_index: 0 %>
       <% end %>
     </div>
 

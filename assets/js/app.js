@@ -20,6 +20,38 @@ import "alpinejs"
 
 // Phoenix LiveView Hooks
 let Hooks = {}
+Hooks.QuillEditor = {
+  initEditor(elem) {
+    var quill = new Quill(elem, {
+      formats: ['bold', 'italic', 'link', 'list'],
+      modules: {
+        toolbar: [
+          ['bold', 'italic'],
+          [{ list: 'ordered' }, { list: 'bullet' }],
+          ['link', 'image']
+        ],
+        clipboard: {
+          matchVisual: false // https://quilljs.com/docs/modules/clipboard/#matchvisual
+        }
+      },
+      placeholder: 'Write a comment...',
+      theme: 'snow'
+    });
+
+    // Store accumulated changes
+    quill.on('text-change', function() {
+      elem.nextElementSibling.value = quill.root.innerHTML;
+    });
+  },
+  mounted() {
+    var editor = this.el.getElementsByClassName("quill-editor")[0]
+    this.initEditor(editor)
+  },
+  updated() {
+    var editor = this.el.getElementsByClassName("quill-editor")[0]
+    this.initEditor(editor)
+  }
+}
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 

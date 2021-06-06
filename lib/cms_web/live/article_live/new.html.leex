@@ -3,4 +3,4 @@
     title: @page_title,
     action: @live_action,
     article: @article,
-    return_to: Routes.article_index_path(@socket, :index) %>
+    return_to: if @article.id, do: Routes.article_show_path(@socket, :show, @article), else: Routes.article_index_path(@socket, :index) %>

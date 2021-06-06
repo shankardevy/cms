@@ -1,4 +1,4 @@
-<h1>Show Article</h1>
+<h1><%= @article.title %></h1>
 
 <%= if @live_action in [:edit] do %>
   <%= live_modal @socket, CmsWeb.ArticleLive.FormComponent,
@@ -9,19 +9,19 @@
     return_to: Routes.article_show_path(@socket, :show, @article) %>
 <% end %>
 
-<ul>
+<%= for component <- @article.components do %>
+  <%= case component.data["type"] do %>
+  <% "file" -> %>
+    <%= live_component @socket, Page.FileComponent, %{component: component} %>
+  <% "image" -> %>
+    <%= live_component @socket, Page.ImageComponent, %{component: component} %>
+  <% "text" -> %>
+    <%= live_component @socket, Page.TextComponent, %{component: component} %>
+  <% "video" -> %>
+    <%= live_component @socket, Page.VideoComponent, %{component: component} %>
+<% end %>
+<% end %>
 
-  <li>
-    <strong>Title:</strong>
-    <%= @article.title %>
-  </li>
 
-  <li>
-    <strong>Components:</strong>
-    <%= @article.components %>
-  </li>
-
-</ul>
-
-<span><%= live_patch "Edit", to: Routes.article_show_path(@socket, :edit, @article), class: "button" %></span>
+<span><%= live_patch "Edit", to: Routes.article_new_path(@socket, :edit, @article), class: "button" %></span>
 <span><%= live_redirect "Back", to: Routes.article_index_path(@socket, :index) %></span>

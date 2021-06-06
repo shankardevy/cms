@@ -9,79 +9,63 @@ defmodule CmsWeb.ArticleLive.SectionComponent do
 
   def render(assigns) do
     ~L"""
-    <div class="mt-4">
+    <div class="group mt-4 relative">
       <%= hidden_inputs_for(@component_form) %>
+      <input type="hidden" name="<%= @component_form.name %>[delete]" value="<%= input_value(@component_form, :delete) %>" />
       <% component = ensure_component(input_value(@component_form, :data)) %>
+      <div class="mb-1 flex items-center justify-end opacity-0 group-hover:opacity-80 focus-within:opacity-80">
+        <div class="absolute z-10 flex items-center justify-end space-x-2 right-0 top-0" data-element="actions">
+          <span class="tooltip top cursor-pointer" aria-label="Edit content" data-element="enable-insert-mode-button">
+            <div class="icon-button">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M17.414 2.586a2 2 0 00-2.828 0L7 10.172V13h2.828l7.586-7.586a2 2 0 000-2.828z" />
+                <path fill-rule="evenodd" d="M2 6a2 2 0 012-2h4a1 1 0 010 2H4v10h10v-4a1 1 0 112 0v4a2 2 0 01-2 2H4a2 2 0 01-2-2V6z" clip-rule="evenodd" />
+              </svg>
+            </div>
+          </span>
+          <span class="tooltip top cursor-pointer" aria-label="Move up">
+            <div class="icon-button"
+              phx-click="move_component"
+              phx-value-component_index="<%= @component_form.index %>"
+              phx-target="#article-form"
+              phx-value-offset="-1">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M5.293 9.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 7.414V15a1 1 0 11-2 0V7.414L6.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+              </svg>
+            </div>
+          </span>
+          <span class="tooltip top cursor-pointer" aria-label="Move down">
+            <div class="icon-button"
+              phx-click="move_component"
+              phx-value-component_index="<%= @component_form.index %>"
+              phx-target="#article-form"
+              phx-value-offset="1">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M14.707 10.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 12.586V5a1 1 0 012 0v7.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+              </svg>
+            </div>
+          </span>
+          <span class="tooltip top cursor-pointer" aria-label="Delete">
+            <div class="icon-button"
+              phx-click="delete_component"
+              phx-target="#article-form"
+              phx-value-component_index="<%= @component_form.index %>">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+              </svg>
+            </div>
+          </span>
+        </div>
+      </div>
       <%= case component.type do %>
         <% "file" -> %>
-        <div class="sm:col-span-4">
-          <input type="hidden" name="<%= @component_form.name %>[data][type]" value="file" />
-          <label for="cover_photo" class="block text-sm font-medium text-gray-700">
-            File
-          </label>
-          <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-            <div class="space-y-1 text-center">
-              <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-              </svg>
-              <div class="flex text-sm text-gray-600">
-                <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                  <span>Upload a file</span>
-                  <input id="file-upload" name="file-upload" type="file" class="sr-only">
-                </label>
-                <p class="pl-1">or drag and drop</p>
-              </div>
-              <p class="text-xs text-gray-500">
-                PNG, JPG, GIF up to 10MB
-              </p>
-            </div>
-          </div>
-        </div>
+          <%= live_component @socket, Page.FileComponent.Form, Map.put(assigns, :component, component) %>
         <% "image" -> %>
-          <div class="sm:col-span-4">
-            <input type="hidden" name="<%= @component_form.name %>[data][type]" value="image" />
-            <label for="cover_photo" class="block text-sm font-medium text-gray-700">
-              Cover photo
-            </label>
-            <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
-              <div class="space-y-1 text-center">
-                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                  <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                </svg>
-                <div class="flex text-sm text-gray-600">
-                  <label for="file-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
-                    <span>Upload a file</span>
-                    <input id="file-upload" name="file-upload" type="file" class="sr-only">
-                  </label>
-                  <p class="pl-1">or drag and drop</p>
-                </div>
-                <p class="text-xs text-gray-500">
-                  PNG, JPG, GIF up to 10MB
-                </p>
-              </div>
-            </div>
-          </div>
+          <%= live_component @socket, Page.ImageComponent.Form, Map.put(assigns, :component, component) %>
         <% "text" -> %>
-          <div class="sm:col-span-4">
-            <label for="about" class="block text-sm font-medium text-gray-700">
-              Text
-            </label>
-            <div class="mt-1">
-              <input type="hidden" name="<%= @component_form.name %>[data][type]" value="text" />
-              <textarea x-data="{resize: () => { $el.style.height = '40px'; $el.style.height = ($el.scrollHeight + 40) + 'px'}}" x-init="" x-on:input="" name="<%= @component_form.name %>[data][text]" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"><%= component.text %></textarea>
-            </div>
-          </div>
-
+          <%= live_component @socket, Page.TextComponent.Form, Map.put(assigns, :component, component) %>
         <% "video" -> %>
-          <div class="sm:col-span-4">
-            <label for="about" class="block text-sm font-medium text-gray-700">
-              Embedded video
-            </label>
-            <div class="mt-1">
-              <input type="hidden" name="<%= @component_form.name %>[data][type]" value="video" />
-              <textarea x-data="{resize: () => { $el.style.height = '40px'; $el.style.height = ($el.scrollHeight + 40) + 'px'}}" x-init="" x-on:input="" name="<%= @component_form.name %>[data][url]" rows="3" class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"><%= component.url %></textarea>
-            </div>
-          </div>
+          <%= live_component @socket, Page.VideoComponent.Form, Map.put(assigns, :component, component) %>
       <% end %>
     </div>
     """

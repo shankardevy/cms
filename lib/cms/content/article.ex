@@ -4,7 +4,7 @@ defmodule Cms.Content.Article do
 
   schema "articles" do
     field :title, :string
-    embeds_many :components, Cms.Content.Component
+    embeds_many :components, Cms.Content.Component, on_replace: :delete
 
     timestamps()
   end

@@ -5,7 +5,9 @@ defmodule Page.VideoComponent do
 
   def render(assigns) do
     ~L"""
-      View mode
+      <div class="video">
+        <%= raw(@component.data["url"]) %>
+      </div>
     """
   end
 

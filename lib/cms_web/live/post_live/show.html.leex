@@ -1,0 +1,9 @@
+<%= if @live_action in [:edit] do %>
+  <%= live_component @socket, CmsWeb.PostLive.FormComponent, id: @post.id,
+    action: @live_action,
+    post: @post,
+    return_to: Routes.post_show_path(@socket, :show, @post) %>
+<% else %>
+  <h1 class="text-4xl"><%= @post.title %></h1>
+  <%= live_patch "Edit", to: Routes.post_show_path(@socket, :edit, @post) %>
+<% end %>

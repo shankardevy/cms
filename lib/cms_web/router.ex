@@ -24,6 +24,14 @@ defmodule CmsWeb.Router do
 
     live "/articles/:id", ArticleLive.Show, :show
     live "/articles/:id/show/edit", ArticleLive.Show, :edit
+
+
+
+    live "/posts", PostLive.Index, :index
+    live "/posts/new", PostLive.New, :new
+
+    live "/posts/:id", PostLive.Show, :show
+    live "/posts/:id/edit", PostLive.Show, :edit
   end
 
   # Other scopes may use custom stacks.

@@ -1,0 +1,6 @@
+<%= live_component @socket, CmsWeb.PostLive.FormComponent,
+    id: @post.id || :new,
+    title: @page_title,
+    action: @live_action,
+    post: @post,
+    return_to: if @post.id, do: Routes.post_show_path(@socket, :show, @post), else: Routes.post_index_path(@socket, :index) %>

@@ -7,6 +7,7 @@ defmodule Cms.Contents do
   alias Cms.Repo
 
   alias Cms.Contents.Post
+  alias Cms.Contents.Component
 
   @doc """
   Returns the list of posts.
@@ -35,7 +36,7 @@ defmodule Cms.Contents do
       ** (Ecto.NoResultsError)
 
   """
-  def get_post!(id), do: Repo.get!(Post, id)
+  def get_post!(id), do: Repo.get!(Post, id) |> Repo.preload(:components)
 
   @doc """
   Creates a post.
@@ -52,6 +53,12 @@ defmodule Cms.Contents do
   def create_post(attrs \\ %{}) do
     %Post{}
     |> Post.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  def create_component(post, attrs \\ %{}) do
+    Ecto.build_assoc(post, :components)
+    |> Component.changeset(attrs)
     |> Repo.insert()
   end
 

@@ -1,9 +1,37 @@
-<%= if @live_action in [:edit] do %>
-  <%= live_component @socket, CmsWeb.PostLive.FormComponent, id: @post.id,
-    action: @live_action,
-    post: @post,
-    return_to: Routes.post_show_path(@socket, :show, @post) %>
-<% else %>
-  <h1 class="text-4xl"><%= @post.title %></h1>
-  <%= live_patch "Edit", to: Routes.post_show_path(@socket, :edit, @post) %>
-<% end %>
+<div class="grid grid-cols-6">
+  <div class="col-span-3">
+
+    <%= if @live_action in [:edit] do %>
+      <%= live_component @socket, CmsWeb.PostLive.FormComponent, id: @post.id,
+        action: @live_action,
+        post: @post,
+        return_to: Routes.post_show_path(@socket, :show, @post) %>
+    <% else %>
+      <h1 class="text-4xl"><%= @post.title %></h1>
+      <%= live_patch "Edit", to: Routes.post_show_path(@socket, :edit, @post) %>
+    <% end %>
+
+    <%= for {component, idx} <- Enum.with_index(@post.components) do %>
+      <div class="group">
+        <%= live_component @socket, CmsWeb.PostLive.ComponentToolbar,
+          post: @post,
+          id: "new-#{idx}",
+          components: enabled_components(),
+          persistent: false,
+          index: idx %>
+
+        <%= render_component @socket, component %>
+      </div>
+
+      <%= if Enum.count(@post.components) == idx + 1 do %>
+        <%= live_component @socket, CmsWeb.PostLive.ComponentToolbar,
+        post: @post,
+        id: "new-end-#{idx}",
+        components: enabled_components(),
+        persistent: true,
+        index: idx + 1 %>
+      <% end %>
+    <% end %>
+
+  </div>
+</div>
